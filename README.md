@@ -59,4 +59,4 @@ Faktapåstandene er kontrollert mot kildene i [kilder.md](kilder.md).
 ## Lisens
 
 - **Kildekoden** er lisensiert under [MIT-lisensen](LICENSE).
-- **Læringsinnholdet** (øktene, quizene og eksemplene) er lisensiert under [Creative Commons Navngivelse 4.0 Internasjonal (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/deed.no). Du kan dele og tilpasse innholdet, også kommersielt, så lenge du oppgir Digitaliseringsskolen som kilde og angir om du har gjort endringer.
+- **Læringsinnholdet** (øktene, quizene og eksemplene) er lisensiert under [Creative Commons Navngivelse 4.0 Internasjonal (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/deed.no). Du kan dele og tilpasse innholdet, også kommersielt, så lenge du oppgir Bjørn-Tore Lund og Digitaliseringsskolen som kilde og angir om du har gjort endringer.

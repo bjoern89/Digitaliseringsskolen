@@ -25,8 +25,38 @@ Du kan også teste lokalt med `npx serve docs` eller `python3 -m http.server -d 
 
 ## Innhold
 
-- **[Læringsplan](laeringsplan.md):** hele kompetanseløpet med alle 20 øktene.
-- **[Kilder og faktasjekk](kilder.md):** kildene øktene er kontrollert mot.
-- **[Agentinstruksjoner](agent-instruksjoner.md):** instruksen for læringsagenten og formatet for nye økter i appen.
+Løpet har 20 økter fordelt på fem linjer:
 
-Når du skal legge til en ny økt, ber du agenten lage den i appformatet og limer objektet inn i `LESSONS` i `docs/index.html`.
+1. **Grunnmuren:** KI-agenter, språkmodeller, automatisering, Power Platform og Copilot Studio (økt 1–5)
+2. **Data som fundament:** datakvalitet, informasjonsforvaltning, dataforvaltning, Microsoft Fabric og RAG (økt 6–10)
+3. **Trygg og ansvarlig bruk:** personvern, cybersikkerhet og KI-forordningen (økt 11–13)
+4. **Fra idé til tjeneste:** sammenhengende tjenester, produktorientering, tjenestedesign og arkitektur (økt 14–17)
+5. **Effekt og endring:** gevinstrealisering, endringsledelse og den agentiske organisasjonen (økt 18–20)
+
+Faktapåstandene er kontrollert mot kildene i [kilder.md](kilder.md).
+
+### Legge til eller endre en økt
+
+Øktene ligger i listen `LESSONS` i `docs/index.html`. Hver økt er et objekt i dette formatet:
+
+```js
+{
+  id: 21, part: 5, min: 4, title: "Tittel",
+  intro: "Kort introduksjon med kobling til forrige økt.",
+  explain: `<p>Forklart på 1 minutt (enkel HTML: p, ul, ol, strong).</p><p class="keyline">Én setning å huske.</p>`,
+  why: ["<strong>Poeng.</strong> Forklaring.", "..."],          // 3–5 punkter
+  example: `<p>Realistisk eksempel fra offentlig sektor.</p>`,
+  reflect: "Ett refleksjonsspørsmål om egen organisasjon.",
+  next: "Én setning om neste tema.",
+  quiz: [                                                       // nøyaktig 3 spørsmål
+    { q: "Spørsmål?", a: ["Alt A", "Alt B", "Alt C", "Alt D"], c: 1, x: "Kort forklaring av riktig svar." }
+  ]
+}
+```
+
+`part` er linjenummeret (1–5), og `c` er indeksen til riktig svar, der 0 er det første alternativet. Øktene låses opp i rekkefølge etter `id`, så nye økter må få fortløpende nummer. Øk versjonsnummeret i `CACHE` i `docs/sw.js` når du endrer innhold, slik at installerte apper henter den nye versjonen.
+
+## Lisens
+
+- **Kildekoden** er lisensiert under [MIT-lisensen](LICENSE).
+- **Læringsinnholdet** (øktene, quizene og eksemplene) er lisensiert under [Creative Commons Navngivelse 4.0 Internasjonal (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/deed.no). Du kan dele og tilpasse innholdet, også kommersielt, så lenge du oppgir Digitaliseringsskolen som kilde og angir om du har gjort endringer.

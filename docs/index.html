@@ -1077,6 +1077,7 @@ function renderProfile() {
     <div><strong>Android:</strong> Åpne siden i Chrome, trykk på menyen (⋮) og velg «Installer app» eller «Legg til på startsiden».</div>
     <div><strong>PC:</strong> I Edge eller Chrome trykker du på installer-ikonet i adressefeltet. Appen fungerer også rett i nettleseren.</div>
     <p class="hint">Fremgangen lagres bare i nettleseren på denne enheten.</p></div></section>
+  <section class="block"><h2>Om appen</h2><p class="hint">Læringsinnholdet er lisensiert under <a href="https://creativecommons.org/licenses/by/4.0/deed.no" target="_blank" rel="noopener">CC BY 4.0</a>. Du kan dele og tilpasse det så lenge du oppgir Digitaliseringsskolen som kilde. Kildekoden er lisensiert under MIT.</p></section>
   <section class="block"><h2>Start på nytt</h2><div class="confirm" id="reset-box"><button class="btn ghost danger" id="reset">Nullstill fremgang</button></div></section>`;
   document.getElementById("reset").addEventListener("click", () => {
     document.getElementById("reset-box").innerHTML = `<span>Alt av XP, merker og refleksjoner på denne enheten slettes.</span><button class="btn ghost" id="no">Avbryt</button><button class="btn" id="yes" style="background:var(--bad);color:var(--surface)">Slett alt</button>`;

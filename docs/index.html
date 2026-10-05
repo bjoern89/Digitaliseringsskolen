@@ -1,0 +1,730 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#0E6A73">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Digitaliseringsskolen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<style>
+/* Layout: ett smalt lesespor (maks 44rem). Læringsløpet tegnes som et linjekart der hver del er en linje og hver økt en stasjon. */
+:root {
+  --bg: #EEF2F4;
+  --surface: #FFFFFF;
+  --surface-2: #F6F9FA;
+  --ink: #13222B;
+  --muted: #566872;
+  --line: #D3DDE2;
+  --fjord: #0E6A73;
+  --fjord-ink: #FFFFFF;
+  --gold: #A86F00;
+  --gold-soft: #FFF0C7;
+  --ok: #1F7A44;
+  --ok-soft: #DDF3E5;
+  --bad: #B3261E;
+  --bad-soft: #FBE3E0;
+  --l1: #0E6A73;
+  --l2: #3550C8;
+  --l3: #B23A58;
+  --l4: #2C7F47;
+  --l5: #7E50C2;
+  --shadow: 0 1px 2px rgba(19,34,43,.06), 0 6px 20px rgba(19,34,43,.06);
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --nav-h: 64px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0C151A; --surface: #14212A; --surface-2: #192933; --ink: #E5EDF1; --muted: #93A6B0; --line: #263843;
+    --fjord: #4BC0C8; --fjord-ink: #062327; --gold: #F2B92E; --gold-soft: #3A2E0E;
+    --ok: #5BD08B; --ok-soft: #12321F; --bad: #FF8A80; --bad-soft: #3A1A18;
+    --l1: #4BC0C8; --l2: #8EA2FF; --l3: #F07C98; --l4: #6CCB8C; --l5: #B99AF0;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0C151A; --surface: #14212A; --surface-2: #192933; --ink: #E5EDF1; --muted: #93A6B0; --line: #263843;
+  --fjord: #4BC0C8; --fjord-ink: #062327; --gold: #F2B92E; --gold-soft: #3A2E0E;
+  --ok: #5BD08B; --ok-soft: #12321F; --bad: #FF8A80; --bad-soft: #3A1A18;
+  --l1: #4BC0C8; --l2: #8EA2FF; --l3: #F07C98; --l4: #6CCB8C; --l5: #B99AF0;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 400 1.0625rem/1.6 var(--f-body);
+  padding-inline: 16px; padding-block: 0 calc(var(--nav-h) + 24px + env(safe-area-inset-bottom, 0px));
+}
+h1, h2, h3 { font-family: var(--f-display); line-height: 1.15; text-wrap: balance; margin: 0; letter-spacing: -.01em; }
+p { margin: 0; }
+a { color: var(--fjord); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--fjord); outline-offset: 2px; border-radius: 6px; }
+.wrap { max-width: 44rem; margin-inline: auto; }
+.eyebrow { font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.num { font-variant-numeric: tabular-nums; }
+.icon { width: 1.25em; height: 1.25em; flex: none; }
+
+/* Topplinje */
+.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: var(--bg);
+  margin-inline: -16px; padding: 10px 16px; border-bottom: 1px solid var(--line);
+}
+.top .wrap { max-width: 64rem; display: flex; align-items: center; gap: 12px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); min-width: 0; }
+.brand svg { width: 34px; height: 34px; flex: none; }
+.brand b { font-family: var(--f-display); font-weight: 800; font-size: 1.05rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chips { margin-left: auto; display: flex; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-weight: 700; font-size: .9rem; white-space: nowrap; }
+.chip.streak { color: var(--gold); }
+.chip.streak.off { color: var(--muted); }
+.chip.xp { color: var(--fjord); }
+
+/* Navigasjon */
+.nav {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+  background: var(--surface); border-top: 1px solid var(--line);
+  padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px));
+  display: flex; justify-content: center; gap: 4px;
+}
+.nav a { flex: 1; max-width: 160px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 4px; border-radius: 12px; text-decoration: none; color: var(--muted); font-size: .8rem; font-weight: 700; }
+.nav a .icon { width: 24px; height: 24px; }
+.nav a[aria-current="page"] { color: var(--fjord); background: color-mix(in srgb, var(--fjord) 12%, transparent); }
+@media (min-width: 760px) {
+  body { padding-bottom: 48px; }
+  .nav { position: static; background: none; border: 0; padding: 0; gap: 4px; }
+  .nav a { flex-direction: row; gap: 6px; padding: 8px 12px; font-size: .9rem; }
+  .nav a .icon { width: 20px; height: 20px; }
+  .top .nav { margin-left: 8px; }
+}
+
+main { padding-top: 20px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 20px; box-shadow: var(--shadow); }
+
+/* Hero / status */
+.hero { display: grid; gap: 16px; }
+.hero h1 { font-size: clamp(1.6rem, 5vw, 2.2rem); font-weight: 800; }
+.hero .lvl { display: flex; align-items: center; gap: 14px; }
+.ring { width: 64px; height: 64px; flex: none; }
+.ring text { font-family: var(--f-display); font-weight: 800; fill: var(--ink); }
+.lvl-name { font-family: var(--f-display); font-weight: 800; font-size: 1.25rem; }
+.bar { height: 10px; border-radius: 99px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden; }
+.bar > i { display: block; height: 100%; background: linear-gradient(90deg, var(--fjord), var(--gold)); border-radius: inherit; transition: width .6s ease; }
+.hero-foot { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: space-between; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 18px; border-radius: 12px; border: 0; background: var(--fjord); color: var(--fjord-ink); font-weight: 700; text-decoration: none; cursor: pointer; min-height: 48px; }
+.btn:hover { filter: brightness(1.08); }
+.btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+.btn.gold { background: var(--gold); color: #1C1300; }
+.btn[disabled] { opacity: .45; cursor: not-allowed; filter: none; }
+
+/* Linjekart */
+.track { display: grid; gap: 28px; margin-top: 28px; }
+.line-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; margin-bottom: 12px; }
+.line-pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 4px 3px 10px; border-radius: 99px; background: var(--lc); color: var(--surface); font-weight: 700; font-size: .78rem; letter-spacing: .04em; text-transform: uppercase; }
+.line-pill b { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--surface); color: var(--lc); font-size: .75rem; }
+.line-head h2 { font-size: 1.35rem; font-weight: 800; }
+.line-head p { color: var(--muted); font-size: .95rem; flex-basis: 100%; }
+.stations { list-style: none; margin: 0; padding: 0; position: relative; }
+.stations::before { content: ""; position: absolute; left: 21px; top: 22px; bottom: 22px; width: 6px; border-radius: 3px; background: var(--lc); opacity: .9; }
+.st { position: relative; display: flex; align-items: center; gap: 14px; padding: 8px 10px 8px 0; text-decoration: none; color: var(--ink); border-radius: 14px; }
+a.st:hover .st-body { border-color: var(--lc); }
+.dot { position: relative; z-index: 1; width: 48px; height: 48px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--surface); border: 5px solid var(--lc); font-family: var(--f-display); font-weight: 800; color: var(--lc); }
+.done .dot { background: var(--lc); color: var(--surface); }
+.current .dot { box-shadow: 0 0 0 6px color-mix(in srgb, var(--lc) 25%, transparent); animation: pulse 2.2s ease-in-out infinite; }
+.locked .dot, .soon .dot { border-color: var(--line); color: var(--muted); }
+.soon .dot { border-style: dashed; }
+@keyframes pulse { 50% { box-shadow: 0 0 0 11px color-mix(in srgb, var(--lc) 10%, transparent); } }
+.st-body { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
+.locked .st-body, .soon .st-body { background: transparent; border-style: dashed; }
+.st-text { flex: 1; min-width: 0; }
+.st-title { display: block; font-weight: 700; line-height: 1.3; }
+.locked .st-title, .soon .st-title { color: var(--muted); }
+.st-meta { display: block; font-size: .85rem; color: var(--muted); }
+.stars { display: inline-flex; gap: 1px; vertical-align: -2px; color: var(--gold); }
+.stars .off { color: var(--line); }
+.stars svg { width: 14px; height: 14px; }
+.st-cta { flex: none; font-weight: 700; font-size: .85rem; padding: 6px 12px; border-radius: 99px; background: var(--lc); color: var(--surface); }
+
+/* Økt */
+.lesson-top { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+.back { display: inline-flex; align-items: center; gap: 4px; text-decoration: none; color: var(--muted); font-weight: 700; padding: 6px 8px 6px 0; }
+.readbar { position: fixed; left: 0; right: 0; top: 0; height: 4px; z-index: 40; background: transparent; padding-top: env(safe-area-inset-top, 0px); pointer-events: none; }
+.readbar i { display: block; height: 4px; width: 0; background: var(--lc, var(--fjord)); }
+.lesson-head { display: grid; gap: 12px; margin-bottom: 22px; }
+.lesson-head h1 { font-size: clamp(1.8rem, 6vw, 2.6rem); font-weight: 800; }
+.lesson-head .intro { font-size: 1.12rem; color: var(--muted); max-width: 62ch; }
+.meta-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 99px; border: 1px solid var(--line); font-size: .85rem; font-weight: 700; color: var(--muted); background: var(--surface); }
+.tag.lc { border-color: var(--lc); color: var(--lc); }
+.sections { display: grid; gap: 16px; }
+.sec h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+.sec h2 .icon { color: var(--lc); }
+.sec .prose { display: grid; gap: 12px; max-width: 65ch; }
+.prose ul, .prose ol { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; }
+.prose strong { font-weight: 700; }
+.keyline { border-left: 5px solid var(--lc); padding: 4px 0 4px 14px; font-weight: 700; }
+.why { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.why li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; }
+.why li > span:first-child { width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; background: color-mix(in srgb, var(--lc) 14%, transparent); color: var(--lc); font-weight: 800; font-family: var(--f-display); font-size: .9rem; }
+.example { background: var(--surface-2); }
+
+/* Quiz */
+.quiz { display: grid; gap: 18px; }
+.q { display: grid; gap: 10px; }
+.q-text { font-weight: 700; }
+.opts { display: grid; gap: 8px; }
+.opt { text-align: left; padding: 12px 14px; border-radius: 12px; border: 2px solid var(--line); background: var(--surface); cursor: pointer; display: flex; gap: 10px; align-items: flex-start; min-height: 48px; }
+.opt:hover:not([disabled]) { border-color: var(--lc); }
+.opt[disabled] { cursor: default; }
+.opt .k { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: .8rem; font-weight: 800; background: var(--surface-2); border: 1px solid var(--line); }
+.opt.right { border-color: var(--ok); background: var(--ok-soft); }
+.opt.right .k { background: var(--ok); color: var(--surface); border-color: var(--ok); }
+.opt.wrong { border-color: var(--bad); background: var(--bad-soft); }
+.opt.wrong .k { background: var(--bad); color: var(--surface); border-color: var(--bad); }
+.explain { font-size: .95rem; padding: 10px 12px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--line); }
+.quiz-score { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-weight: 700; }
+textarea { width: 100%; min-height: 120px; resize: vertical; padding: 12px 14px; border-radius: 12px; border: 2px solid var(--line); background: var(--surface); color: var(--ink); font: inherit; }
+textarea:focus { border-color: var(--lc); outline: none; }
+.hint { font-size: .88rem; color: var(--muted); }
+.next-card { display: flex; gap: 14px; align-items: center; }
+.finish { display: grid; gap: 10px; justify-items: center; text-align: center; padding-block: 12px; }
+
+/* Merker */
+.badges { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-top: 16px; }
+.badge { display: grid; align-content: start; justify-items: center; text-align: center; gap: 8px; padding: 18px 12px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); }
+.medal { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 35% 30%, var(--gold-soft), color-mix(in srgb, var(--gold) 55%, var(--surface))); color: var(--ink); border: 3px solid var(--gold); }
+.medal svg { width: 34px; height: 34px; }
+.badge.off .medal { background: var(--surface-2); border: 3px dashed var(--line); color: var(--muted); }
+.badge b { font-family: var(--f-display); font-size: 1.05rem; }
+.badge small { color: var(--muted); font-size: .85rem; line-height: 1.35; }
+.badge.off b { color: var(--muted); }
+
+/* Profil */
+.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+@media (min-width: 600px) { .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.stat { padding: 14px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
+.stat b { display: block; font-family: var(--f-display); font-size: 1.8rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.stat span { font-size: .85rem; color: var(--muted); }
+.page-title { font-size: clamp(1.6rem, 5vw, 2.2rem); font-weight: 800; }
+.block { margin-top: 28px; display: grid; gap: 12px; }
+.block h2 { font-size: 1.25rem; font-weight: 800; }
+.journal { display: grid; gap: 10px; }
+.journal article { padding: 14px 16px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); border-left: 5px solid var(--lc); }
+.journal p { white-space: pre-wrap; overflow-wrap: anywhere; }
+.install { display: grid; gap: 10px; }
+.install div { padding: 12px 14px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); }
+.danger { color: var(--bad); }
+.confirm { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+/* Modal + toast */
+.modal { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 16px; background: rgba(8,16,20,.55); }
+.modal .card { width: min(100%, 26rem); text-align: center; display: grid; gap: 14px; justify-items: center; }
+.modal h2 { font-size: 1.7rem; font-weight: 800; }
+.gain { width: 100%; display: grid; gap: 6px; text-align: left; }
+.gain div { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-bottom: 1px dashed var(--line); }
+.gain div:last-child { border: 0; font-weight: 800; color: var(--fjord); }
+.new-badges { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.new-badges .medal { width: 56px; height: 56px; }
+.new-badges .medal svg { width: 26px; height: 26px; }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(var(--nav-h) + 16px + env(safe-area-inset-bottom, 0px)); z-index: 70; background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 12px; font-weight: 700; box-shadow: var(--shadow); max-width: calc(100% - 32px); }
+@media (min-width: 760px) { .toast { bottom: 24px; } }
+#confetti { position: fixed; inset: 0; z-index: 65; pointer-events: none; width: 100%; height: 100%; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="readbar" id="readbar" hidden><i></i></div>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#lop" aria-label="Digitaliseringsskolen, til læringsløpet">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="11" fill="var(--fjord)"/><path d="M9 28 L17 18 L23 23 L31 12" fill="none" stroke="var(--fjord-ink)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="28" r="3.4" fill="var(--gold)"/><circle cx="17" cy="18" r="3.4" fill="var(--fjord-ink)"/><circle cx="23" cy="23" r="3.4" fill="var(--fjord-ink)"/><circle cx="31" cy="12" r="3.4" fill="var(--fjord-ink)"/></svg>
+      <b>Digitaliseringsskolen</b>
+    </a>
+    <nav class="nav" id="nav" aria-label="Hovedmeny"></nav>
+    <div class="chips" id="chips"></div>
+  </div>
+</header>
+<main class="wrap" id="app"></main>
+<canvas id="confetti" hidden></canvas>
+
+<script>
+/* ---------- Innhold ---------- */
+const PARTS = [
+  { n: 1, name: "Grunnmuren", sub: "KI-agenter, språkmodeller og automatisering", c: "--l1" },
+  { n: 2, name: "Data som fundament", sub: "Datakvalitet, informasjonsforvaltning og Microsoft Fabric", c: "--l2" },
+  { n: 3, name: "Trygg og ansvarlig bruk", sub: "Personvern, sikkerhet og KI-forordningen", c: "--l3" },
+  { n: 4, name: "Fra idé til tjeneste", sub: "Produktorientering, tjenestedesign og arkitektur", c: "--l4" },
+  { n: 5, name: "Effekt og endring", sub: "Gevinstrealisering, endringsledelse og strategi", c: "--l5" }
+];
+
+const LESSONS = [
+{
+  id: 1, part: 1, min: 4, title: "Hva er en KI-agent?",
+  intro: "Velkommen til Digitaliseringsskolen! Vi starter med et begrep du sikkert har hørt mye om: KI-agenter. Etter denne økten vet du hva en agent er, hvordan den skiller seg fra en chatbot, og hvorfor den er relevant for offentlig sektor.",
+  explain: `<p><strong>Kunstig intelligens (KI)</strong> er datasystemer som løser oppgaver vi vanligvis forbinder med menneskelig tenkning, som å forstå tekst og trekke slutninger.</p>
+<p>En <strong>chatbot</strong>, for eksempel Copilot eller ChatGPT, svarer på det du spør om. Du spør og den svarer, og så er det opp til deg å gjøre noe med svaret.</p>
+<p>En <strong>KI-agent</strong> går et steg lenger. Den får et <strong>mål</strong> og finner selv ut hvilke steg som trengs. En agent kan typisk tre ting:</p>
+<ul><li><strong>Forstå:</strong> den tolker en henvendelse eller en situasjon.</li><li><strong>Planlegge:</strong> den bestemmer hva som må gjøres, og i hvilken rekkefølge.</li><li><strong>Handle:</strong> den bruker verktøy, for eksempel slår opp i et fagsystem, fyller ut et skjema eller sender en e-post.</li></ul>
+<p class="keyline">En chatbot gir deg svar. En agent gjør jobben, eller deler av den.</p>`,
+  why: [
+    "<strong>Mer tid til fagarbeid.</strong> Mye tid går med til sortering, oppslag og standardsvar. Agenter kan ta unna mye av dette.",
+    "<strong>Bedre service.</strong> En agent kan svare hele døgnet og hjelpe innbyggeren videre i stedet for å vise til en nettside.",
+    "<strong>Nye vurderinger.</strong> Når en maskin handler og ikke bare svarer, blir ansvar, personvern og kontroll viktigere.",
+    "<strong>Teknologien er her.</strong> Med verktøy som Copilot Studio kan du lage agenter uten å være programmerer.",
+    "<strong>Bedre bestillinger.</strong> Når du vet hva en agent kan og ikke kan, blir du en bedre bestiller og forvalter."
+  ],
+  example: `<p>En kommune får hundrevis av henvendelser om <strong>byggesaker</strong> hver måned. Mange spør om det samme: «Må jeg søke for å bygge en terrasse?»</p>
+<p><strong>Med en chatbot</strong> får innbyggeren et generelt svar og en lenke til regelverket. <strong>Med en KI-agent</strong> kan det se slik ut:</p>
+<ol><li>Innbyggeren beskriver hva hen vil bygge.</li><li>Agenten spør om størrelse og avstand til nabogrensen.</li><li>Agenten sjekker reglene og svarer om tiltaket er søknadspliktig.</li><li>Hvis det er søknadspliktig, hjelper den innbyggeren i gang med søknaden.</li><li>Hvis saken er uklar, sender den henvendelsen til en saksbehandler sammen med et ferdig sammendrag.</li></ol>
+<p>Saksbehandleren slipper de enkle spørsmålene og får bedre forberedte saker. <strong>Det er fortsatt et menneske som avgjør de vanskelige sakene.</strong></p>`,
+  reflect: "Hvilken oppgave i din enhet gjentar seg ofte og følger omtrent samme mønster, slik at en agent kunne løst deler av den? Hvor går grensen for hva du ville latt den gjøre alene?",
+  next: "Språkmodeller er motoren i agenten. Vi ser på hva som skjer når en agent forstår og skriver tekst, og hvorfor den noen ganger tar feil.",
+  quiz: [
+    { q: "Hva skiller en KI-agent fra en vanlig chatbot?", a: ["Agenten har alltid rett", "Agenten kan bruke verktøy og handle for å nå et mål", "Agenten trenger ingen data", "Agenten kan bare brukes av programmerere"], c: 1, x: "En chatbot svarer. En agent kan i tillegg planlegge og handle, for eksempel slå opp i et system eller fylle ut et skjema." },
+    { q: "Hvilke tre ting kan en agent typisk gjøre?", a: ["Lagre, slette og arkivere", "Forstå, planlegge og handle", "Kopiere, lime inn og sende", "Måle, telle og rapportere"], c: 1, x: "Forstå, planlegge og handle er kjernen i det som gjør noe til en agent." },
+    { q: "Hva skjer med uklare saker i byggesakseksemplet?", a: ["Agenten avslår søknaden", "Agenten gjetter på et svar", "Saken sendes til en saksbehandler med et sammendrag", "Innbyggeren må ringe sentralbordet"], c: 2, x: "Mennesket tar beslutningen i vanskelige saker. Agenten forbereder saken." }
+  ]
+},
+{
+  id: 2, part: 1, min: 4, title: "Språkmodeller – motoren i agenten",
+  intro: "I økt 1 lærte du at en agent forstår, planlegger og handler. Delen som forstår og skriver tekst, er en språkmodell. Når du vet hvordan den virker, forstår du både styrkene og svakhetene til agenten.",
+  explain: `<p>En <strong>stor språkmodell</strong> (på engelsk <em>large language model</em>, LLM) er trent på enorme mengder tekst. Den har lært mønstre i hvordan språk henger sammen.</p>
+<p>Når du skriver noe, regner modellen ut hvilket ord som mest sannsynlig kommer neste, og så det neste, ord for ord. Slik kan den skrive, oppsummere, oversette og resonnere.</p>
+<p>Men en språkmodell <strong>slår ikke opp fakta</strong> slik en database gjør. Den kan derfor skrive noe som høres riktig ut, men er feil. Dette kalles <strong>hallusinering</strong>.</p>
+<p>Modellen kjenner heller ikke til interne dokumenter eller hendelser etter at den ble trent, med mindre vi gir den tilgang til slike kilder.</p>
+<p class="keyline">En språkmodell er god på språk, men den er ikke et oppslagsverk.</p>`,
+  why: [
+    "<strong>Kvalitetssikring.</strong> Fordi modellen kan hallusinere, må viktige svar kontrolleres mot kilden.",
+    "<strong>Riktig bruk.</strong> Den passer godt til utkast, oppsummeringer og omformuleringer, og dårligere til fakta du ikke kan sjekke.",
+    "<strong>Egne kilder.</strong> Skal agenten svare om din virksomhet, må den kobles til virksomhetens eget innhold. Det ser vi på i økt 10.",
+    "<strong>Personvern.</strong> Det du skriver inn, blir behandlet av en tjeneste. Vit hvilke verktøy virksomheten har godkjent for hvilke opplysninger.",
+    "<strong>Språk.</strong> Kvaliteten kan variere mellom bokmål, nynorsk og samisk. Test på språkene brukerne dine faktisk bruker."
+  ],
+  example: `<p>En saksbehandler i en statlig etat ber en språkmodell oppsummere et høringsnotat på 40 sider. Oppsummeringen er ryddig og nyttig og sparer en time med lesing.</p>
+<p>Men modellen viser til en paragraf som ikke finnes i notatet. Saksbehandleren oppdager feilen fordi hun sjekker mot originalen.</p>
+<p>Etter dette endrer enheten rutinen: Språkmodellen lager <strong>utkastet</strong>, og den blir bedt om å <strong>oppgi sidetall</strong> for viktige påstander. Et menneske kontrollerer før noe går videre.</p>`,
+  reflect: "I hvilke av dine arbeidsoppgaver ville en feil fra en språkmodell vært ufarlig, og i hvilke ville den vært alvorlig?",
+  next: "Ikke alt bør løses med KI. Vi ser på forskjellen mellom regelbasert automatisering og KI, og når du bør velge hva.",
+  quiz: [
+    { q: "Hvordan lager en språkmodell tekst?", a: ["Den slår opp svaret i en database", "Den regner ut hvilket ord som mest sannsynlig kommer neste", "Den kopierer tekst fra internett", "Den følger faste regler skrevet av programmerere"], c: 1, x: "Modellen bygger svaret ord for ord ut fra sannsynlighet, basert på mønstre den har lært." },
+    { q: "Hva betyr det at en språkmodell hallusinerer?", a: ["Den svarer overbevisende, men feil", "Den nekter å svare", "Den bruker for lang tid", "Den svarer på feil språk"], c: 0, x: "Hallusinering er når modellen finner på noe som høres troverdig ut." },
+    { q: "Hvorfor kjenner ikke en språkmodell til virksomhetens interne rutiner?", a: ["Fordi rutinene er for lange", "Fordi modellen bare forstår engelsk", "Fordi rutinene ikke var med i treningen, og modellen ikke har fått tilgang til dem", "Fordi interne rutiner er hemmelige ved lov"], c: 2, x: "Modellen vet bare det den er trent på, pluss kildene vi kobler den til." }
+  ]
+},
+{
+  id: 3, part: 1, min: 4, title: "Automatisering: fra regler til KI",
+  intro: "Nå vet du at agenten bruker en språkmodell som motor. Men ikke alt bør løses med KI. Mye kan automatiseres tryggere og billigere med faste regler, og de beste løsningene kombinerer ofte begge deler.",
+  explain: `<p><strong>Regelbasert automatisering</strong> følger faste «hvis–så»-regler: <em>Hvis</em> søknaden mangler vedlegg, <em>så</em> send en påminnelse. Samme input gir alltid samme resultat. Eksempler er flyter i Power Automate og RPA, programvareroboter som klikker seg gjennom skjermbilder.</p>
+<p><strong>KI-basert automatisering</strong> takler variasjon, fritekst og tolkning. Den er fleksibel, men svarer ikke alltid helt likt, fordi den bygger på sannsynlighet (økt 2).</p>
+<p>En nyttig tommelfingerregel:</p>
+<ul><li>Bruk <strong>regler</strong> når oppgaven er tydelig, stabil og må være forutsigbar.</li><li>Bruk <strong>KI</strong> når input er ustrukturert, som e-post, fritekst eller dokumenter.</li><li><strong>Kombiner</strong> dem: KI tolker, regler kontrollerer og utfører.</li></ul>
+<p class="keyline">KI tolker. Regler sikrer. Mennesker avgjør der det trengs skjønn.</p>`,
+  why: [
+    "<strong>Rett verktøy.</strong> Regler er billigere, raskere og lettere å teste der de passer.",
+    "<strong>Rettssikkerhet.</strong> Helautomatiserte vedtak krever hjemmel i lov og må kunne forklares. Regler er lettere å forklare enn KI.",
+    "<strong>Forutsigbarhet.</strong> Innbyggere skal behandles likt. Regler gir samme utfall for like saker.",
+    "<strong>Størst gevinst i kombinasjon.</strong> Mange prosesser har både et tolkningssteg og et kontrollsteg."
+  ],
+  example: `<p>En fylkeskommune forvalter en <strong>tilskuddsordning</strong> for frivillige lag. Søknadene kommer inn som fritekst og vedlegg.</p>
+<ol><li><strong>KI</strong> leser søknaden og henter ut organisasjonsnummer, beløp og formål.</li><li><strong>Regler</strong> sjekker at organisasjonsnummeret finnes i Enhetsregisteret, og at beløpet er innenfor rammen.</li><li><strong>Saksbehandleren</strong> får en ferdig sjekkliste og fatter vedtaket.</li></ol>
+<p>Behandlingstiden går ned, og saksbehandleren bruker tiden på skjønnsvurderingene i stedet for å taste inn tall.</p>`,
+  reflect: "Tenk på en prosess hos dere: Hvilke steg er faste regler, hvilke krever tolkning, og hvilke krever menneskelig skjønn?",
+  next: "Microsoft Power Platform er verktøykassen mange offentlige virksomheter allerede har til regler, KI og apper.",
+  quiz: [
+    { q: "Når passer regelbasert automatisering best?", a: ["Når input er fritekst som varierer mye", "Når oppgaven er tydelig og stabil og må være forutsigbar", "Når ingen vet hvordan oppgaven skal løses", "Når man vil ha kreative forslag"], c: 1, x: "Regler er best der logikken er klar og like saker skal gi likt utfall." },
+    { q: "Hva kjennetegner KI-basert automatisering?", a: ["Den gir alltid nøyaktig samme svar", "Den krever ingen data", "Den takler fritekst og variasjon, men svarer ikke alltid likt", "Den kan bare brukes i Excel"], c: 2, x: "KI er fleksibel fordi den bygger på sannsynlighet, og nettopp derfor ikke helt forutsigbar." },
+    { q: "Hva gjelder for helautomatiserte vedtak i offentlig sektor?", a: ["De er alltid forbudt", "De krever hjemmel i lov og må kunne forklares", "De kan innføres fritt hvis IT godkjenner", "De gjelder bare kommuner"], c: 1, x: "Automatiserte vedtak må ha rettslig grunnlag, og innbyggeren må kunne forstå hvorfor utfallet ble som det ble." }
+  ]
+},
+{
+  id: 4, part: 1, min: 4, title: "Hva er Power Platform?",
+  intro: "I økt 3 så vi at regler og KI ofte fungerer best sammen. Microsoft Power Platform er en verktøykasse for nettopp det, og mange offentlige virksomheter har den allerede tilgjengelig gjennom Microsoft 365.",
+  explain: `<p>Power Platform er en samling <strong>lavkodeverktøy</strong>. Lavkode betyr at du bygger løsninger med klikk og dra-og-slipp, med lite eller ingen programmering.</p>
+<ul><li><strong>Power Apps:</strong> enkle apper og skjemaer, også på mobil.</li><li><strong>Power Automate:</strong> flyter som automatiserer oppgaver, altså reglene fra økt 3.</li><li><strong>Power BI:</strong> rapporter og dashbord.</li><li><strong>Copilot Studio:</strong> verktøyet for å lage KI-agenter.</li><li><strong>Power Pages:</strong> nettsider for eksterne brukere.</li></ul>
+<p>Under ligger <strong>Dataverse</strong>, en felles database, og hundrevis av <strong>koblinger</strong> (connectors) til systemer som SharePoint, Outlook, Teams og egne fagsystemer.</p>
+<p class="keyline">Fagfolk kan bygge løsninger selv, men noen må eie og forvalte dem.</p>`,
+  why: [
+    "<strong>Raskere løsninger.</strong> Fagfolk som kjenner behovet, kan bygge enkle løsninger selv. De kalles ofte innbyggerutviklere (citizen developers).",
+    "<strong>Avlaster IT.</strong> IT kan konsentrere seg om de store systemene og om å legge til rette for andre.",
+    "<strong>Krever styring.</strong> Uten regler for miljøer, tilganger og hvilke koblinger som er lov, kan det oppstå skygge-IT og datalekkasjer.",
+    "<strong>Forvaltning.</strong> En app som blir brukt, må ha en eier når den som laget den, bytter jobb.",
+    "<strong>Lisenser.</strong> Noen funksjoner krever tilleggslisenser. Avklar kostnader tidlig."
+  ],
+  example: `<p>Vaktmestertjenesten i en kommune får feilmeldinger fra skolene på e-post, telefon og lapper. Mye blir borte.</p>
+<ol><li>En <strong>Power App</strong> lar ansatte melde feil fra mobilen med bilde og romnummer.</li><li><strong>Power Automate</strong> sender meldingen til riktig vaktmester og gir beskjed når feilen er rettet.</li><li><strong>Power BI</strong> viser hvilke bygg som har flest feil, som grunnlag for vedlikeholdsplanen.</li></ol>
+<p>Løsningen ble laget på noen uker av en ansatt i eiendomsavdelingen. IT satte opp et eget miljø og bestemte hvilke koblinger som kunne brukes.</p>`,
+  reflect: "Hvem bør få lov til å bygge løsninger i Power Platform hos dere, og hvem har ansvaret når løsningen skal forvaltes over tid?",
+  next: "Nå bygger vi videre: din første agent i Copilot Studio, og byggeklossene den består av.",
+  quiz: [
+    { q: "Hvilken del av Power Platform brukes til å lage KI-agenter?", a: ["Power BI", "Power Pages", "Copilot Studio", "Dataverse"], c: 2, x: "Copilot Studio er verktøyet for agenter. Power BI er for rapporter, og Dataverse er databasen." },
+    { q: "Hva betyr lavkode?", a: ["Løsninger med lav sikkerhet", "Å bygge løsninger med klikk og dra-og-slipp, med lite programmering", "Kode som kjører sakte", "Gratis programvare"], c: 1, x: "Lavkode senker terskelen slik at flere kan bygge løsninger." },
+    { q: "Hvorfor trenger Power Platform styring?", a: ["For å hindre at noen bruker det", "For å unngå skygge-IT, datalekkasjer og løsninger uten eier", "Fordi det ikke virker uten", "Fordi loven forbyr lavkode"], c: 1, x: "Regler for miljøer, koblinger og eierskap gjør at løsningene blir trygge og kan forvaltes." }
+  ]
+},
+{
+  id: 5, part: 1, min: 5, title: "Din første agent i Copilot Studio",
+  intro: "Nå kobler vi sammen alt du har lært: hva en agent er (økt 1), språkmodellen som motor (økt 2), samspillet mellom regler og KI (økt 3) og Power Platform (økt 4). En agent i Copilot Studio består av noen få byggeklosser.",
+  explain: `<ul><li><strong>Instruksjoner:</strong> hvem agenten er, hva den skal gjøre og ikke gjøre, og hvilken tone den skal ha. Dette er agentens stillingsbeskrivelse.</li>
+<li><strong>Kunnskap:</strong> kildene agenten skal svare ut fra, for eksempel nettsider, SharePoint eller dokumenter. Svar som bygger på kilder, reduserer faren for hallusinering.</li>
+<li><strong>Emner (topics):</strong> faste samtaleløp der du vil styre svaret nøyaktig. Dette er den regelbaserte delen.</li>
+<li><strong>Handlinger og verktøy:</strong> lar agenten gjøre noe, for eksempel starte en Power Automate-flyt eller slå opp i et system.</li>
+<li><strong>Kanaler:</strong> der agenten publiseres, for eksempel Teams eller en nettside.</li></ul>
+<p class="keyline">Start smått. Én avgrenset oppgave, én god kilde og testing med ekte spørsmål.</p>`,
+  why: [
+    "<strong>Instruksjoner og kunnskap avgjør kvaliteten.</strong> En agent er aldri bedre enn kildene den får.",
+    "<strong>Avgrensning gir trygghet.</strong> En agent som vet hva den ikke skal svare på, er lettere å stole på.",
+    "<strong>Testing før lansering.</strong> Ekte spørsmål fra brukerne avslører hull i kildene.",
+    "<strong>Eierskap.</strong> Agenten trenger en forvalter som oppdaterer kilder og følger med på svarene.",
+    "<strong>Personvern.</strong> Vurder hvilke kilder agenten får tilgang til, særlig hvis de inneholder personopplysninger."
+  ],
+  example: `<p>HR-avdelingen i en statlig virksomhet lager agenten <strong>«Spør HR»</strong> i Teams.</p>
+<ul><li><strong>Instruksjoner:</strong> Svar kort, på bokmål eller nynorsk, og henvis til HR ved personlige saker.</li><li><strong>Kunnskap:</strong> personalhåndboka på intranettet.</li><li><strong>Emne:</strong> «Melde sykefravær», med faste steg som alltid skal følges.</li><li><strong>Handling:</strong> søknad om å overføre ferie sendes via en Power Automate-flyt.</li></ul>
+<p>Før lansering testet de agenten med 50 ekte spørsmål fra HR-postkassen. Tre av svarene var feil fordi personalhåndboka var utdatert. Det ble rettet før agenten ble tatt i bruk.</p>`,
+  reflect: "Hvis du skulle lage én agent i morgen, hvilken avgrenset oppgave ville du startet med, og hvilken kunnskapskilde ville den trengt?",
+  next: "HR-agenten svarte feil fordi kilden var utdatert. I del 2 ser vi på data: hva det er, og hvorfor kvaliteten er avgjørende.",
+  quiz: [
+    { q: "Hva er hensikten med kunnskapskilder i en agent?", a: ["Å gjøre agenten raskere", "At svarene bygger på virksomhetens eget innhold", "Å lagre samtalene", "Å oversette til engelsk"], c: 1, x: "Kunnskap gir agenten noe konkret å svare ut fra. Det reduserer hallusinering." },
+    { q: "Når bør du bruke et emne (topic)?", a: ["Når du vil styre svaret nøyaktig", "Når du ikke vet hva brukerne spør om", "Når agenten skal lære seg nye språk", "Aldri, det er utdatert"], c: 0, x: "Emner er faste samtaleløp, altså den regelbaserte delen av agenten." },
+    { q: "Hva er lurt å gjøre før en agent lanseres?", a: ["Skjule den for brukerne", "Teste den med ekte spørsmål fra brukerne", "Fjerne alle instruksjoner", "Koble den til alle tilgjengelige kilder"], c: 1, x: "Ekte spørsmål viser hvor kildene og instruksjonene har hull." }
+  ]
+},
+{
+  id: 6, part: 2, min: 4, title: "Hva er data – og hvorfor er kvalitet viktig?",
+  intro: "Agenten i økt 5 var bare så god som personalhåndboka den leste. Det gjelder all KI og all digitalisering: dårlige data gir dårlige svar. Her starter del 2 av løpet, der data er fundamentet.",
+  explain: `<p><strong>Data</strong> er registrerte opplysninger, som tall, tekst, bilder og lyd.</p>
+<ul><li><strong>Strukturerte data</strong> ligger ordnet i tabeller, for eksempel adresser, saksnummer og datoer i et fagsystem.</li><li><strong>Ustrukturerte data</strong> er e-post, dokumenter og bilder. Språkmodeller (økt 2) gjør disse langt mer brukbare enn før.</li></ul>
+<p><strong>Datakvalitet</strong> handler om at data er</p>
+<ul><li><strong>fullstendige:</strong> ingenting viktig mangler,</li><li><strong>korrekte:</strong> de stemmer med virkeligheten,</li><li><strong>oppdaterte:</strong> de er ikke utdaterte,</li><li><strong>konsistente:</strong> det samme er registrert likt i ulike systemer.</li></ul>
+<p class="keyline">Søppel inn, søppel ut. KI gjør ikke dårlige data bedre, den sprer dem raskere.</p>`,
+  why: [
+    "<strong>KI forsterker feil.</strong> En agent med feil kilde gir feil svar til mange på kort tid.",
+    "<strong>Kun én gang.</strong> Innbyggere og næringsliv skal ikke måtte oppgi samme opplysning flere ganger. Det krever data som kan deles og stoles på.",
+    "<strong>Bedre beslutninger.</strong> Statistikk og styringsinformasjon er aldri bedre enn dataene bak.",
+    "<strong>Personvern.</strong> God datakvalitet handler også om å ikke lagre mer enn nødvendig (dataminimering)."
+  ],
+  example: `<p>En kommune lager en agent som svarer på når søpla hentes. Tømmekalenderen ligger i tre ulike regneark med ulike skrivemåter: «Storgata 1», «Storg. 1» og «STORGATA 1».</p>
+<p>Agenten svarer feil for mange adresser, og innbyggerne mister tilliten.</p>
+<p>Løsningen var ikke en bedre agent, men <strong>bedre data</strong>: ett register, én tydelig eier og adresser hentet fra matrikkelen. Etterpå virket både agenten og nettsiden.</p>`,
+  reflect: "Hvilke data i din enhet blir brukt av andre, og hvem har ansvaret for at de er riktige?",
+  next: "Informasjonsforvaltning: hvordan arkiv, metadata og deling sørger for at informasjon kan finnes og brukes igjen.",
+  quiz: [
+    { q: "Hvilket av disse er et eksempel på ustrukturerte data?", a: ["En tabell med saksnummer og datoer", "E-poster fra innbyggere", "Et register med organisasjonsnummer", "En liste med postnummer"], c: 1, x: "Fritekst som e-post og dokumenter er ustrukturert. Tabeller er strukturert." },
+    { q: "Hva betyr kun én gang-prinsippet?", a: ["At hver ansatt bare kan logge inn én gang", "At innbyggere ikke skal måtte oppgi samme opplysning flere ganger", "At data bare kan brukes én gang", "At en sak bare kan behandles én gang"], c: 1, x: "Offentlig sektor skal gjenbruke opplysninger den allerede har, når regelverket tillater det." },
+    { q: "Hvorfor er datakvalitet ekstra viktig når man bruker KI?", a: ["Fordi KI bare virker med tall", "Fordi KI retter opp feil automatisk", "Fordi feil i dataene spres raskt til mange brukere", "Fordi KI krever nye data hver dag"], c: 2, x: "KI gjør ikke dårlige data bedre. Den sprer feilene raskere og til flere." }
+  ]
+}
+];
+
+const COMING = [
+  { id: 7, part: 2, title: "Informasjonsforvaltning: arkiv, metadata og deling" },
+  { id: 8, part: 2, title: "Dataforvaltning og eierskap til data" },
+  { id: 9, part: 2, title: "Microsoft Fabric i et nøtteskall" },
+  { id: 10, part: 2, title: "Kunnskapskilder for agenter (RAG forklart enkelt)" },
+  { id: 11, part: 3, title: "Personvern og KI – hva sier regelverket?" },
+  { id: 12, part: 3, title: "Cybersikkerhet for agenter og automatisering" },
+  { id: 13, part: 3, title: "KI-forordningen og risikovurdering" },
+  { id: 14, part: 4, title: "Sammenhengende tjenester i offentlig sektor" },
+  { id: 15, part: 4, title: "Produktorientering vs. prosjekt" },
+  { id: 16, part: 4, title: "Tjenestedesign og brukerinnsikt" },
+  { id: 17, part: 4, title: "Systemforvaltning og arkitektur for agenter" },
+  { id: 18, part: 5, title: "Gevinstrealisering" },
+  { id: 19, part: 5, title: "Endringsledelse når KI kommer inn i arbeidshverdagen" },
+  { id: 20, part: 5, title: "Fra enkeltagenter til en agentisk organisasjon" }
+];
+
+/* ---------- Spillregler ---------- */
+const XP = { read: 20, correct: 10, perfect: 20, reflect: 15 };
+const LEVELS = [
+  { min: 0, name: "Nysgjerrig" },
+  { min: 60, name: "Utforsker" },
+  { min: 150, name: "Pådriver" },
+  { min: 260, name: "Veiviser" },
+  { min: 380, name: "Endringsagent" },
+  { min: 500, name: "Digitaliseringsmester" }
+];
+
+const I = {
+  check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  star: '<path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/>',
+  flame: '<path d="M12 3c.8 3.2 5 5.4 5 10.2A5 5 0 0 1 7 13.4c0-2.1 1-3.6 2.1-4.6.1 2 .9 3 2 3.2C11 9 10.4 6.3 12 3z"/>',
+  bulb: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.4 1.1 2.2h5c0-.8.4-1.6 1.1-2.2A6 6 0 0 0 12 3z"/>',
+  layers: '<path d="M12 3l9 5-9 5-9-5zM3 13l9 5 9-5"/>',
+  db: '<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/>',
+  up: '<path d="M4 17l6-6 4 4 6-7M14 8h6v6"/>',
+  target: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".8"/>',
+  route: '<circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"/>',
+  medal: '<circle cx="12" cy="14" r="6"/><path d="M8.5 9.2L6 3h4l2 4 2-4h4l-2.5 6.2"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.4-6 8-6s6.5 2 8 6"/>',
+  back: '<path d="M15 5l-7 7 7 7"/>',
+  lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  book: '<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 21V5"/>',
+  quiz: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17.2v.1"/>',
+  pencil: '<path d="M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4"/>',
+  arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  sparkle: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/>'
+};
+const ico = (n, cls = "icon") => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[n]}</svg>`;
+const starIco = on => `<svg viewBox="0 0 24 24" class="${on ? "" : "off"}" fill="currentColor" aria-hidden="true">${I.star}</svg>`;
+
+const BADGES = [
+  { id: "forste", name: "Første stasjon", icon: "check", desc: "Fullfør din første økt", test: s => doneCount(s) >= 1 },
+  { id: "feilfri", name: "Feilfri", icon: "star", desc: "Svar riktig på alle spørsmålene i en quiz", test: s => Object.values(s.best).some(v => v >= 3) },
+  { id: "tenker", name: "Tenkeren", icon: "bulb", desc: "Skriv tre refleksjoner", test: s => Object.keys(s.reflXp).length >= 3 },
+  { id: "streak3", name: "Tre på rad", icon: "flame", desc: "Lær tre dager på rad", test: s => s.bestStreak >= 3 },
+  { id: "grunnmur", name: "Grunnmuren", icon: "layers", desc: "Fullfør alle øktene i linje 1", test: s => LESSONS.filter(l => l.part === 1).every(l => s.done[l.id]) },
+  { id: "datavenn", name: "Datavenn", icon: "db", desc: "Fullfør første økt i linje 2", test: s => LESSONS.some(l => l.part === 2 && s.done[l.id]) },
+  { id: "padriver", name: "Pådriver", icon: "up", desc: "Nå nivå 3", test: s => levelOf(s.xp).i >= 2 },
+  { id: "skarp", name: "Skarpskytter", icon: "target", desc: "Fullfør fem quizer uten feil", test: s => Object.values(s.best).filter(v => v >= 3).length >= 5 }
+];
+
+/* ---------- Tilstand ---------- */
+const KEY = "dskolen.v1";
+const fresh = () => ({ xp: 0, done: {}, best: {}, refl: {}, reflXp: {}, badges: {}, streak: 0, bestStreak: 0, last: null, correct: 0 });
+let S = (() => { try { const raw = localStorage.getItem(KEY); return raw ? Object.assign(fresh(), JSON.parse(raw)) : fresh(); } catch (e) { return fresh(); } })();
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+
+const doneCount = s => Object.keys(s.done).length;
+const levelOf = xp => { let i = 0; LEVELS.forEach((l, k) => { if (xp >= l.min) i = k; }); const cur = LEVELS[i], nxt = LEVELS[i + 1]; return { i, cur, nxt, pct: nxt ? (xp - cur.min) / (nxt.min - cur.min) : 1 }; };
+const lessonById = id => LESSONS.find(l => l.id === id);
+const unlocked = id => id === 1 || !!S.done[id - 1];
+const currentLesson = () => LESSONS.find(l => !S.done[l.id] && unlocked(l.id));
+const partOf = n => PARTS.find(p => p.n === n);
+const esc = t => String(t).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const dayKey = d => { const x = d || new Date(); return x.getFullYear() + "-" + String(x.getMonth() + 1).padStart(2, "0") + "-" + String(x.getDate()).padStart(2, "0"); };
+const maxXp = n => XP.read + n * XP.correct + XP.perfect + XP.reflect;
+const liveStreak = () => { if (!S.last) return 0; const y = new Date(); y.setDate(y.getDate() - 1); return (S.last === dayKey() || S.last === dayKey(y)) ? S.streak : 0; };
+
+function touchStreak() {
+  const today = dayKey(); if (S.last === today) return;
+  const y = new Date(); y.setDate(y.getDate() - 1);
+  S.streak = S.last === dayKey(y) ? S.streak + 1 : 1;
+  S.last = today; S.bestStreak = Math.max(S.bestStreak, S.streak);
+}
+function checkBadges() {
+  const got = [];
+  BADGES.forEach(b => { if (!S.badges[b.id] && b.test(S)) { S.badges[b.id] = dayKey(); got.push(b); } });
+  return got;
+}
+
+/* ---------- Skall ---------- */
+const app = document.getElementById("app");
+function renderChrome(view) {
+  const st = liveStreak(), lv = levelOf(S.xp);
+  document.getElementById("chips").innerHTML =
+    `<span class="chip streak ${st ? "" : "off"}" title="Dager på rad">${ico("flame")}<span class="num">${st}</span></span>` +
+    `<span class="chip xp" title="Nivå ${lv.i + 1}: ${lv.cur.name}">${ico("sparkle")}<span class="num">${S.xp} XP</span></span>`;
+  const items = [["lop", "Løpet", "route"], ["merker", "Merker", "medal"], ["profil", "Profil", "user"]];
+  const active = view.startsWith("okt-") ? "lop" : view;
+  document.getElementById("nav").innerHTML = items.map(([k, t, i]) => `<a href="#${k}" ${active === k ? 'aria-current="page"' : ""}>${ico(i)}<span>${t}</span></a>`).join("");
+}
+
+function ringSvg(pct, label) {
+  const r = 26, c = 2 * Math.PI * r;
+  return `<svg class="ring" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="${r}" fill="none" stroke="var(--line)" stroke-width="7"/><circle cx="32" cy="32" r="${r}" fill="none" stroke="var(--fjord)" stroke-width="7" stroke-linecap="round" stroke-dasharray="${c * pct} ${c}" transform="rotate(-90 32 32)"/><text x="32" y="38" text-anchor="middle" font-size="18">${label}</text></svg>`;
+}
+
+/* ---------- Visning: Løpet ---------- */
+function renderMap() {
+  const lv = levelOf(S.xp), cur = currentLesson(), dc = doneCount(S), total = LESSONS.length + COMING.length;
+  const greet = dc === 0 ? "Klar for første stasjon?" : cur ? "Godt jobbet, fortsett løpet!" : "Du har fullført alle tilgjengelige økter!";
+  let html = `<section class="card hero" aria-label="Din status">
+    <div><p class="eyebrow">Kompetanseløp i digitalisering · ${dc} av ${total} økter</p><h1>${greet}</h1></div>
+    <div class="lvl">${ringSvg(lv.pct, lv.i + 1)}<div style="flex:1;min-width:0;display:grid;gap:6px">
+      <span class="lvl-name">Nivå ${lv.i + 1}: ${lv.cur.name}</span>
+      <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(lv.pct * 100)}" aria-label="Fremgang til neste nivå"><i style="width:${lv.pct * 100}%"></i></div>
+      <span class="hint num">${lv.nxt ? `${lv.nxt.min - S.xp} XP til ${lv.nxt.name}` : "Høyeste nivå nådd"}</span></div></div>
+    <div class="hero-foot"><span class="hint">Hver økt tar 3–5 minutter og gir opptil ${maxXp(3)} XP.</span>
+      ${cur ? `<a class="btn" href="#okt-${cur.id}">${dc ? "Fortsett" : "Start"}: Økt ${cur.id} ${ico("arrow")}</a>` : `<a class="btn ghost" href="#merker">Se merkene dine</a>`}</div>
+  </section><div class="track">`;
+  PARTS.forEach(p => {
+    const items = [...LESSONS.filter(l => l.part === p.n), ...COMING.filter(c => c.part === p.n)];
+    html += `<section style="--lc:var(${p.c})" aria-label="Linje ${p.n}: ${p.name}"><div class="line-head"><span class="line-pill">Linje<b>${p.n}</b></span><h2>${p.name}</h2><p>${p.sub}</p></div><ol class="stations">`;
+    items.forEach(it => {
+      const full = !!it.quiz;
+      if (!full) { html += `<li class="soon"><div class="st"><span class="dot">${it.id}</span><span class="st-body"><span class="st-text"><span class="st-title">${it.title}</span><span class="st-meta">Kommer snart</span></span></span></div></li>`; return; }
+      const done = !!S.done[it.id], open = unlocked(it.id), isCur = cur && cur.id === it.id;
+      const cls = done ? "done" : isCur ? "current" : open ? "" : "locked";
+      const best = S.best[it.id] || 0;
+      const stars = done ? `<span class="stars" aria-label="${best} av 3 riktige">${[0, 1, 2].map(k => starIco(k < best)).join("")}</span>` : "";
+      const meta = done ? `${stars} · ${S.done[it.id].xp || 0} XP` : open ? `${it.min} min · opptil ${maxXp(it.quiz.length)} XP` : `Låses opp etter økt ${it.id - 1}`;
+      const inner = `<span class="dot">${done ? ico("check") : open ? it.id : ico("lock")}</span><span class="st-body"><span class="st-text"><span class="st-title">${it.title}</span><span class="st-meta">${meta}</span></span>${isCur ? `<span class="st-cta">Start</span>` : ""}</span>`;
+      html += `<li class="${cls}">${open ? `<a class="st" href="#okt-${it.id}">${inner}</a>` : `<div class="st" aria-disabled="true">${inner}</div>`}</li>`;
+    });
+    html += `</ol></section>`;
+  });
+  app.innerHTML = html + `</div>`;
+}
+
+/* ---------- Visning: Økt ---------- */
+let Q = null; // pågående quiz
+function renderLesson(id) {
+  const L = lessonById(id);
+  if (!L || !unlocked(id)) { location.hash = "lop"; return; }
+  const p = partOf(L.part);
+  Q = { id, ans: {} };
+  const rb = document.getElementById("readbar"); rb.hidden = false; rb.style.setProperty("--lc", `var(${p.c})`);
+  const nxt = lessonById(id + 1) || COMING.find(c => c.id === id + 1);
+  app.innerHTML = `<article style="--lc:var(${p.c})">
+    <div class="lesson-top"><a class="back" href="#lop">${ico("back")} Løpet</a></div>
+    <header class="lesson-head">
+      <div class="meta-row"><span class="tag lc">Linje ${p.n} · ${p.name}</span><span class="tag">Økt ${L.id}</span><span class="tag">${ico("clock")} ${L.min} min</span>${S.done[id] ? `<span class="tag">${ico("check")} Fullført</span>` : ""}</div>
+      <h1>${L.title}</h1>
+      <p class="intro">${L.intro}</p>
+    </header>
+    <div class="sections">
+      <section class="card sec"><h2>${ico("clock")} Forklart på 1 minutt</h2><div class="prose">${L.explain}</div></section>
+      <section class="card sec"><h2>${ico("bulb")} Hvorfor er dette viktig?</h2><ul class="why">${L.why.map((w, i) => `<li><span>${i + 1}</span><span>${w}</span></li>`).join("")}</ul></section>
+      <section class="card sec example"><h2>${ico("book")} Eksempel</h2><div class="prose">${L.example}</div></section>
+      <section class="card sec" id="quiz"><h2>${ico("quiz")} Sjekk forståelsen</h2><div class="quiz" id="qbox"></div></section>
+      <section class="card sec"><h2>${ico("pencil")} Refleksjonsspørsmål</h2><div class="prose"><p><strong>${L.reflect}</strong></p>
+        <label for="refl-${id}" class="hint">Skriv noen setninger. Det gir +${XP.reflect} XP første gang, og svaret lagres i refleksjonsloggen din på denne enheten.</label>
+        <textarea id="refl-${id}" placeholder="Hos oss ...">${esc(S.refl[id] || "")}</textarea></div></section>
+      <section class="card sec"><h2>${ico("arrow")} Neste tema</h2><div class="next-card"><div class="prose"><p>${nxt ? `<strong>Økt ${nxt.id}: ${nxt.title}.</strong> ` : ""}${L.next}</p></div></div></section>
+      <div class="finish"><button class="btn gold" id="finish" disabled>${ico("check")} Fullfør økten</button><span class="hint" id="finish-hint">Svar på alle spørsmålene i quizen for å fullføre.</span></div>
+    </div></article>`;
+  renderQuiz();
+  const ta = document.getElementById(`refl-${id}`);
+  ta.addEventListener("input", () => { S.refl[id] = ta.value; save(); });
+  document.getElementById("finish").addEventListener("click", finishLesson);
+}
+
+function renderQuiz() {
+  const L = lessonById(Q.id), box = document.getElementById("qbox");
+  const answered = Object.keys(Q.ans).length, score = L.quiz.filter((q, i) => Q.ans[i] === q.c).length;
+  box.innerHTML = L.quiz.map((q, i) => {
+    const a = Q.ans[i];
+    return `<div class="q"><p class="q-text">${i + 1}. ${q.q}</p><div class="opts">${q.a.map((o, k) => {
+      const cls = a === undefined ? "" : k === q.c ? "right" : k === a ? "wrong" : "";
+      return `<button class="opt ${cls}" data-q="${i}" data-k="${k}" ${a !== undefined ? "disabled" : ""}><span class="k">${"ABCD"[k]}</span><span>${o}</span></button>`;
+    }).join("")}</div>${a !== undefined ? `<p class="explain" role="status"><strong>${a === q.c ? "Riktig!" : "Ikke helt."}</strong> ${q.x}</p>` : ""}</div>`;
+  }).join("") + (answered === L.quiz.length ? `<div class="quiz-score"><span class="num">${score} av ${L.quiz.length} riktige</span><button class="btn ghost" id="retry">Prøv igjen</button></div>` : "");
+  box.querySelectorAll(".opt:not([disabled])").forEach(b => b.addEventListener("click", () => { Q.ans[+b.dataset.q] = +b.dataset.k; renderQuiz(); }));
+  const r = document.getElementById("retry"); if (r) r.addEventListener("click", () => { Q.ans = {}; renderQuiz(); });
+  const f = document.getElementById("finish");
+  if (f) { const ok = answered === L.quiz.length; f.disabled = !ok; document.getElementById("finish-hint").textContent = ok ? (S.done[Q.id] ? "Du har fullført før. Nye poeng gis bare for forbedringer." : "Klar! Fullfør for å samle XP.") : "Svar på alle spørsmålene i quizen for å fullføre."; }
+}
+
+function finishLesson() {
+  const L = lessonById(Q.id), id = Q.id, n = L.quiz.length;
+  const score = L.quiz.filter((q, i) => Q.ans[i] === q.c).length;
+  const first = !S.done[id], old = S.best[id] || 0, lvBefore = levelOf(S.xp).i;
+  const rows = [];
+  if (first) rows.push(["Økt lest", XP.read]);
+  if (score > old) { rows.push([`Riktige svar (${score - old} nye)`, (score - old) * XP.correct]); S.correct += score - old; }
+  if (score === n && old < n) rows.push(["Bonus for feilfri quiz", XP.perfect]);
+  const txt = (S.refl[id] || "").trim();
+  if (txt.length >= 15 && !S.reflXp[id]) { rows.push(["Refleksjon skrevet", XP.reflect]); S.reflXp[id] = true; }
+  const gained = rows.reduce((a, r) => a + r[1], 0);
+  S.best[id] = Math.max(old, score);
+  S.done[id] = { date: dayKey(), xp: ((S.done[id] && S.done[id].xp) || 0) + gained };
+  S.xp += gained; touchStreak();
+  const newBadges = checkBadges(); save();
+  const lvAfter = levelOf(S.xp);
+  const nxt = lessonById(id + 1);
+  showModal(`<h2>${score === n ? "Feilfritt!" : "Økt fullført!"}</h2>
+    <p class="hint">${score} av ${n} riktige · ${liveStreak()} ${liveStreak() === 1 ? "dag" : "dager"} på rad</p>
+    ${rows.length ? `<div class="gain">${rows.map(r => `<div><span>${r[0]}</span><span class="num">+${r[1]} XP</span></div>`).join("")}<div><span>Totalt</span><span class="num">+${gained} XP</span></div></div>` : `<p>Repetisjon styrker læringen. Du har allerede alle poengene for denne økten.</p>`}
+    ${lvAfter.i > lvBefore ? `<p><strong>Nytt nivå: ${lvAfter.i + 1} – ${lvAfter.cur.name}!</strong></p>` : ""}
+    ${newBadges.length ? `<p class="eyebrow">Nye merker</p><div class="new-badges">${newBadges.map(b => `<div style="display:grid;justify-items:center;gap:4px"><span class="medal">${ico(b.icon, "")}</span><small>${b.name}</small></div>`).join("")}</div>` : ""}
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">${nxt ? `<a class="btn" href="#okt-${nxt.id}" data-close>Neste: Økt ${nxt.id} ${ico("arrow")}</a>` : ""}<a class="btn ghost" href="#lop" data-close>Til løpet</a></div>`);
+  if (gained || newBadges.length) confetti();
+}
+
+/* ---------- Visning: Merker ---------- */
+function renderBadges() {
+  const n = Object.keys(S.badges).length;
+  app.innerHTML = `<h1 class="page-title">Merker</h1><p class="hint" style="margin-top:6px">${n} av ${BADGES.length} merker samlet. Merkene viser hva du har mestret, ikke hvor raskt du gikk.</p>
+  <div class="badges">${BADGES.map(b => { const on = !!S.badges[b.id]; return `<div class="badge ${on ? "" : "off"}"><span class="medal">${ico(on ? b.icon : "lock", "")}</span><b>${b.name}</b><small>${b.desc}${on ? `<br>Låst opp ${fmtDate(S.badges[b.id])}` : ""}</small></div>`; }).join("")}</div>`;
+}
+const fmtDate = k => { const [y, m, d] = k.split("-"); return `${+d}.${+m}.${y}`; };
+
+/* ---------- Visning: Profil ---------- */
+function renderProfile() {
+  const lv = levelOf(S.xp);
+  const refl = LESSONS.filter(l => (S.refl[l.id] || "").trim());
+  app.innerHTML = `<h1 class="page-title">Din fremgang</h1>
+  <div class="card" style="margin-top:16px;display:flex;align-items:center;gap:14px">${ringSvg(lv.pct, lv.i + 1)}<div style="min-width:0"><span class="lvl-name">${lv.cur.name}</span><p class="hint num">${S.xp} XP${lv.nxt ? ` · ${lv.nxt.min - S.xp} XP til nivå ${lv.i + 2}` : ""}</p></div></div>
+  <div class="stats">
+    <div class="stat"><b>${doneCount(S)}</b><span>økter fullført</span></div>
+    <div class="stat"><b>${S.correct}</b><span>riktige svar</span></div>
+    <div class="stat"><b>${liveStreak()}</b><span>dager på rad nå</span></div>
+    <div class="stat"><b>${S.bestStreak}</b><span>lengste rekke</span></div>
+  </div>
+  <section class="block"><h2>Refleksjonsloggen din</h2>${refl.length ? `<div class="journal">${refl.map(l => `<article style="--lc:var(${partOf(l.part).c})"><p class="eyebrow">Økt ${l.id} · ${l.title}</p><p style="margin-top:6px">${esc(S.refl[l.id])}</p></article>`).join("")}</div>` : `<p class="hint">Svarene dine på refleksjonsspørsmålene samles her. Ta dem med til neste teammøte.</p>`}</section>
+  <section class="block"><h2>Bruk appen på mobil og PC</h2><div class="install">
+    <div><strong>iPhone:</strong> Åpne siden i Safari, trykk på Del-knappen og velg «Legg til på Hjem-skjerm».</div>
+    <div><strong>Android:</strong> Åpne siden i Chrome, trykk på menyen (⋮) og velg «Installer app» eller «Legg til på startsiden».</div>
+    <div><strong>PC:</strong> I Edge eller Chrome trykker du på installer-ikonet i adressefeltet. Appen fungerer også rett i nettleseren.</div>
+    <p class="hint">Fremgangen lagres bare i nettleseren på denne enheten.</p></div></section>
+  <section class="block"><h2>Start på nytt</h2><div class="confirm" id="reset-box"><button class="btn ghost danger" id="reset">Nullstill fremgang</button></div></section>`;
+  document.getElementById("reset").addEventListener("click", () => {
+    document.getElementById("reset-box").innerHTML = `<span>Alt av XP, merker og refleksjoner på denne enheten slettes.</span><button class="btn ghost" id="no">Avbryt</button><button class="btn" id="yes" style="background:var(--bad);color:var(--surface)">Slett alt</button>`;
+    document.getElementById("no").addEventListener("click", renderProfile);
+    document.getElementById("yes").addEventListener("click", () => { S = fresh(); save(); toast("Fremgangen er nullstilt"); route(); });
+  });
+}
+
+/* ---------- Modal, toast, konfetti ---------- */
+function showModal(inner) {
+  const m = document.createElement("div"); m.className = "modal"; m.setAttribute("role", "dialog"); m.setAttribute("aria-modal", "true");
+  m.innerHTML = `<div class="card">${inner}</div>`;
+  const close = () => m.remove();
+  m.addEventListener("click", e => { if (e.target === m || e.target.closest("[data-close]")) close(); });
+  document.addEventListener("keydown", function k(e) { if (e.key === "Escape") { close(); document.removeEventListener("keydown", k); } });
+  document.body.appendChild(m); const f = m.querySelector(".btn"); if (f) f.focus();
+}
+function toast(t) { const el = document.createElement("div"); el.className = "toast"; el.setAttribute("role", "status"); el.textContent = t; document.body.appendChild(el); setTimeout(() => el.remove(), 2600); }
+function confetti() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const cv = document.getElementById("confetti"), ctx = cv.getContext("2d"); cv.hidden = false;
+  const W = cv.width = innerWidth, H = cv.height = innerHeight;
+  const cs = getComputedStyle(document.documentElement), cols = ["--l1", "--l2", "--l3", "--l4", "--l5", "--gold"].map(c => cs.getPropertyValue(c).trim());
+  const ps = Array.from({ length: 140 }, () => ({ x: W / 2, y: H * .4, vx: (Math.random() - .5) * 14, vy: -Math.random() * 14 - 4, r: Math.random() * 6 + 4, a: Math.random() * 6, c: cols[Math.floor(Math.random() * cols.length)] }));
+  let t = 0;
+  (function f() {
+    ctx.clearRect(0, 0, W, H); t++;
+    ps.forEach(p => { p.vy += .35; p.x += p.vx; p.y += p.vy; p.a += .2; ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a); ctx.fillStyle = p.c; ctx.fillRect(-p.r / 2, -p.r / 4, p.r, p.r / 2); ctx.restore(); });
+    if (t < 110) requestAnimationFrame(f); else { ctx.clearRect(0, 0, W, H); cv.hidden = true; }
+  })();
+}
+
+/* ---------- Ruting ---------- */
+function onScroll() {
+  const rb = document.getElementById("readbar"); if (rb.hidden) return;
+  const h = document.documentElement, max = h.scrollHeight - h.clientHeight;
+  rb.firstElementChild.style.width = (max > 0 ? Math.min(100, h.scrollTop / max * 100) : 0) + "%";
+}
+function route() {
+  document.querySelectorAll(".modal").forEach(m => m.remove());
+  const v = location.hash.slice(1) || "lop";
+  document.getElementById("readbar").hidden = true;
+  if (v.startsWith("okt-")) renderLesson(parseInt(v.slice(4), 10));
+  else if (v === "merker") renderBadges();
+  else if (v === "profil") renderProfile();
+  else renderMap();
+  renderChrome(v);
+  window.scrollTo(0, 0); onScroll();
+}
+addEventListener("hashchange", route);
+addEventListener("scroll", onScroll, { passive: true });
+route();
+
+if ("serviceWorker" in navigator && location.protocol === "https:") {
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+}
+</script>
+</body>
+</html>

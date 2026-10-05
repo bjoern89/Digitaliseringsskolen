@@ -1,16 +1,17 @@
 # Læringsplan – Digitaliseringsskolen
 
 Løpet går fra grunnleggende til avansert. Hver økt bygger på de forrige.
+Økter merket ✅ er ferdig skrevet og ligger i appen (`docs/index.html`). Resten vises som «Kommer snart».
 
 ## Del 1 – Grunnmuren
-1. Hva er en KI-agent? ✅ [`okter/01-hva-er-en-ki-agent.md`](okter/01-hva-er-en-ki-agent.md)
-2. Språkmodeller – motoren i agenten
-3. Automatisering: fra regler til KI
-4. Hva er Power Platform?
-5. Din første agent i Copilot Studio
+1. Hva er en KI-agent? ✅
+2. Språkmodeller – motoren i agenten ✅
+3. Automatisering: fra regler til KI ✅
+4. Hva er Power Platform? ✅
+5. Din første agent i Copilot Studio ✅
 
 ## Del 2 – Data som fundament
-6. Hva er data – og hvorfor er kvalitet viktig?
+6. Hva er data – og hvorfor er kvalitet viktig? ✅
 7. Informasjonsforvaltning: arkiv, metadata og deling
 8. Dataforvaltning og eierskap til data
 9. Microsoft Fabric i et nøtteskall

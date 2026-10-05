@@ -64,3 +64,22 @@ Ett naturlig neste steg.
 - **Koble alltid nye temaer til tidligere læring** («I økt 2 så vi at …»).
 - Følg læringsplanen i `laeringsplan.md` som utgangspunkt, men tilpass hvis brukeren ber om et bestemt tema.
 - Hvis brukeren skriver «neste», lever neste økt i løpet.
+
+## Nye økter til appen
+
+Appen i `docs/index.html` henter øktene fra listen `LESSONS`. Når brukeren ber om en økt «til appen», skal du levere den som et JavaScript-objekt i dette formatet, slik at det kan limes rett inn i listen. Fjern samtidig økten fra `COMING`.
+
+```js
+{
+  id: 7, part: 2, min: 4, title: "Tittel",
+  intro: "Kort introduksjon med kobling til forrige økt.",
+  explain: `<p>Forklart på 1 minutt (enkel HTML: p, ul, ol, strong).</p><p class="keyline">Én setning å huske.</p>`,
+  why: ["<strong>Poeng.</strong> Forklaring.", "..."],          // 3–5 punkter
+  example: `<p>Realistisk eksempel fra offentlig sektor.</p>`,
+  reflect: "Ett refleksjonsspørsmål om egen organisasjon.",
+  next: "Én setning om neste tema.",
+  quiz: [                                                       // nøyaktig 3 spørsmål
+    { q: "Spørsmål?", a: ["Alt A", "Alt B", "Alt C", "Alt D"], c: 1, x: "Kort forklaring av riktig svar." }
+  ]
+}
+```

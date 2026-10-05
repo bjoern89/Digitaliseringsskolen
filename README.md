@@ -26,6 +26,7 @@ Du kan også teste lokalt med `npx serve docs` eller `python3 -m http.server -d 
 ## Innhold
 
 - **[Læringsplan](laeringsplan.md):** hele kompetanseløpet med alle 20 øktene.
+- **[Kilder og faktasjekk](kilder.md):** kildene øktene er kontrollert mot.
 - **[Agentinstruksjoner](agent-instruksjoner.md):** instruksen for læringsagenten og formatet for nye økter i appen.
 
 Når du skal legge til en ny økt, ber du agenten lage den i appformatet og limer objektet inn i `LESSONS` i `docs/index.html`.

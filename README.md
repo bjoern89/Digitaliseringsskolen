@@ -5,10 +5,11 @@ En læringsapp for ansatte i offentlig sektor som jobber med tjenesteutvikling, 
 ## Appen (`docs/`)
 
 - **Læringsløpet som linjekart:** fem linjer (deler) med 20 stasjoner (økter). Hver økt låses opp når du har fullført den forrige.
-- **XP og nivåer:** fra «Nysgjerrig» til «Digitaliseringsmester».
+- **XP og nivåer:** sju nivåer fra «Nysgjerrig» til «Digitaliseringsmester».
 - **Quiz:** tre spørsmål per økt med forklaring. Du får stjerner og bonus for feilfri quiz.
 - **Streak:** teller hvor mange dager på rad du har lært noe.
-- **Merker:** åtte merker for milepæler, for eksempel «Grunnmuren» og «Tenkeren».
+- **Merker:** 13 merker for milepæler, blant annet ett per fullført linje og «Uteksaminert» for hele løpet.
+- **Kursbevis:** vises på profilsiden når alle 20 øktene er fullført.
 - **Refleksjonslogg:** svarene dine på refleksjonsspørsmålene samles på profilsiden.
 - **Offline og installerbar:** PWA med manifest og service worker.
 
@@ -24,7 +25,7 @@ Du kan også teste lokalt med `npx serve docs` eller `python3 -m http.server -d 
 
 ## Innhold
 
-- **[Læringsplan](laeringsplan.md):** hele kompetanseløpet. Økt 1–6 er ferdige.
+- **[Læringsplan](laeringsplan.md):** hele kompetanseløpet med alle 20 øktene.
 - **[Agentinstruksjoner](agent-instruksjoner.md):** instruksen for læringsagenten og formatet for nye økter i appen.
 
 Når du skal legge til en ny økt, ber du agenten lage den i appformatet og limer objektet inn i `LESSONS` i `docs/index.html`.
